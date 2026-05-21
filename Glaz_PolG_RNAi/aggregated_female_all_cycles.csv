@@ -1,0 +1,12 @@
+,Glaz_+_w3 vs Glaz_BL31081_w3,Glaz_+_w3 vs Glaz_V106955_w3,Glaz_+_w7 vs Glaz_BL31081_w7,Glaz_+_w7 vs Glaz_V106955_w7,Glaz_+_w3 vs Glaz_+_w7,Glaz_BL31081_w3 vs Glaz_BL31081_w7,Glaz_V106955_w3 vs Glaz_V106955_w7
+Gender,female,female,female,female,female,female,female
+position_LME,0.236 (NS),0.639 (NS),0.006 (**),0.002 (**),0.000 (***),0.000 (***),0.000 (***)
+position_Peak,0.732 (NS),0.590 (NS),0.022 (*),0.005 (**),0.001 (***),0.001 (**),0.004 (**)
+velocity_LME,0.314 (NS),0.621 (NS),0.218 (NS),0.513 (NS),0.014 (*),0.029 (*),0.143 (NS)
+velocity_Peak,1.000 (NS),0.732 (NS),0.146 (NS),0.020 (*),0.001 (***),0.534 (NS),0.009 (**)
+low performer_LME,0.267 (NS),0.427 (NS),0.042 (*),0.054 (NS),0.000 (***),0.000 (***),0.000 (***)
+low performer_Peak,1.000 (NS),0.505 (NS),0.121 (NS),0.011 (*),0.002 (**),0.001 (**),0.004 (**)
+middle performer_LME,0.645 (NS),0.579 (NS),0.034 (*),0.050 (*),0.000 (***),0.000 (***),0.000 (***)
+middle performer_Peak,0.005 (**),0.203 (NS),0.121 (NS),0.011 (*),0.002 (**),0.002 (**),0.004 (**)
+high performer_LME,0.715 (NS),0.819 (NS),0.053 (NS),0.232 (NS),0.000 (***),0.000 (***),0.000 (***)
+high performer_Peak,0.469 (NS),0.590 (NS),0.023 (*),0.004 (**),0.001 (**),0.008 (**),0.004 (**)
