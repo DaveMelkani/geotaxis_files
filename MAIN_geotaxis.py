@@ -24,7 +24,7 @@ from video_processor import VideoProcessor
 from vial_network import Vial_Network
 from gt_process import Finalized_Geotaxis
 from gt_data_agg import GenotypeAnalyzer
-from statistical_analysis_2 import Statistical_Analysis
+from statistical_analysis import Statistical_Analysis
 
 def main():
     experiment = input("Enter experiment name (e.g., 'CS_SK2' or 'W1118_CLKOut'): ")
@@ -100,7 +100,6 @@ def main():
     #________________STATISTICAL_ANALYSIS________________#
     sa = Statistical_Analysis(experiment, filter_time=stats_time_cut)
     sa.run_analysis()
-    
     #________________ZIPPING_FOLDER________________
     input_folder = f'./{experiment}/'
     output_zip_path = f'./{experiment}_ZIPPED.zip'
@@ -197,6 +196,6 @@ def check_required_files(experiment, video_folder):
             print(f"Missing trimmed video file: {file}")
             return False
     return True
-
+    
 if __name__ == "__main__":
     main()

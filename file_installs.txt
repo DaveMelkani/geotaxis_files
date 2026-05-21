@@ -1,3 +1,18 @@
+WindowsOS Install Steps:
+# Do this one time:
+conda env remove -n geo_env -y
+conda create -n geo_env -c conda-forge python=3.10 nomkl ffmpeg pandas numpy scipy matplotlib scikit-learn scikit-image pillow tqdm seaborn statsmodels -y
+conda activate geo_env
+pip install opencv-python-headless
+pip install torch torchvision torchaudio
+
+# Do this every time:
+conda activate geo_env
+python MAIN_geotaxis.py
+
+
+
+# Ubuntu LinuxOS Install Steps:
 # Do this one time:
 module load Anaconda3
 conda create -n geo_env
@@ -10,17 +25,3 @@ conda activate geo_env
 python MAIN_geotaxis.py
 
 
-
-
-
-NEW:
-# Do this one time:
-conda env remove -n geo_env -y
-conda create -n geo_env -c conda-forge python=3.10 nomkl ffmpeg pandas numpy scipy matplotlib scikit-learn scikit-image pillow tqdm seaborn statsmodels -y
-conda activate geo_env
-pip install opencv-python-headless
-pip install torch torchvision torchaudio
-
-# Do this every time:
-conda activate geo_env
-python MAIN_geotaxis.py
