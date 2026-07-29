@@ -49,7 +49,7 @@ The device is a **crank-rocker four-bar linkage**. The key components and their 
 2. The crank's outer pin moves in a circle; the connecting rod transmits this motion upward.
 3. The connecting rod pushes up on the mid-point of the lever arm.
 4. Because the right end of the lever arm is fixed to the pivot point, the left end (carrying the vial holder) swings upward in an arc.
-5. As the crank continues past the top of its rotation, it pulls the connecting rod down, which pulls the lever arm and vial holder back to the starting position — tapping the flies to the bottom.
+5. As the crank continues past the top of its rotation, it pulls the connecting rod down, which pulls the lever arm and vial holder back to the starting position, thus tapping the flies to the bottom.
 6. This cycle repeats continuously at a frequency set by the motor speed.
 
 ---
@@ -63,26 +63,26 @@ main_files_and_folders_so_far/
 │   ├── Curved_TopCover.stl
 │   └── Gept_Arm_Backplate.stl
 ├── middle_parts_attach_holder/
-│   ├── ArmSleve.stl
-│   ├── CentrPS.stl
-│   ├── ARM_B_end_d2.stl
-│   ├── ArmInsert2.stl
+│   ├── Vial_Holder_Connector.stl
+│   ├── Piston_Push_Mid_link.stl
+│   ├── Arm_Rotation_Bearing_Mount.stl
+│   ├── Arm_Length_Body.stl
 │   └── GeoT_Fulcram.stl
 ├── connecting_rod/
-│   ├── Bearing_Rod_PistonAdapter.stl
-│   ├── Bearing_Rod_Piston_Cyl.stl
-│   └── Bearing_Rod_Adapter.stl
+│   ├── Top_Bearing_TO_Cylinder_Connector.stl
+│   ├── Top_Push_Cylinder.stl
+│   └── Bottom_Bearing_Rod_Adapter(Piston).stl
 ├── crank_input_link/
-│   ├── cranckside_D5.stl
+│   ├── Crank_Hand.stl
 │   ├── GeoT_Crank_Mount_final.stl
 │   ├── GeoT_Crank_Mount_motorEnd_Final.stl
-│   └── ND_CrankStand.stl
+│   └── Crank_Stand.stl
 ├── motor_drive/
 │   ├── Big_Motor_Faceplate.stl
 │   ├── Motor_Brace.stl
 │   └── GeoT_gear_crank.stl
 ├── base_frame/
-│   └── GeoT_Base_motor_D2.stl
+│   └── GeoT_Base_Motor_Drive_Mount.stl
 └── cable_management_box/
     ├── drivermount.stl
     └── drivermount_top.stl
