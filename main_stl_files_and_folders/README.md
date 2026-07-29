@@ -1,4 +1,4 @@
-# 3D-Printed Geotaxis Assay Device — STL File README
+# 3D-Printed Geotaxis Assay Device: STL File README
 
 All STL files required to reproduce the device described in the associated manuscript are organized into the subfolders listed below. Print settings for each component are provided in the [Print Settings](#print-settings) section. Non-printed hardware requirements are listed in the [Bill of Materials](#bill-of-materials) section.
 
