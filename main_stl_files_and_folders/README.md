@@ -36,7 +36,7 @@ The full mechanical system is 3D printed with the exception of two steel guide r
 The device is a **crank-rocker four-bar linkage**. The key components and their roles are:
 
 - **Base Frame** — The rigid black structure sitting on the bench, including two horizontal parallel steel rods. These rods connect the motor assembly to the pivot stand, keeping everything in alignment.
-- **Motor & Gearbox** — An electric motor drives a printed gear pair to reduce rotational speed and increase torque.
+- **Motor & Gearbox** — An electric motor drives a 3D-printed gear pair to reduce rotational speed and increase torque.
 - **Crank (Input Link)** — Attached directly to the gearbox output shaft. Rotates continuously in a full 360° circle.
 - **Connecting Rod (Coupler)** — Links the crank's outer pin to the underside of the lever arm. An adjustable metal sleeve on this piece allows fine-tuning of the stroke length and resting height.
 - **Lever Arm (Rocker)** — The long articulated arm spanning the top of the device. Pushed upward from below by the connecting rod and pinned at its right end to the fulcrum.
@@ -74,14 +74,16 @@ main_files_and_folders_so_far/
 │   └── Bottom_Bearing_Rod_Adapter(Piston).stl
 ├── crank_input_link/
 │   ├── Crank_Hand.stl
-│   ├── GeoT_Crank_Mount_final.stl
-│   ├── GeoT_Crank_Mount_motorEnd_Final.stl
+│   ├── CrankStand_BottomBrace.stl
 │   └── Crank_Stand.stl
 ├── motor_drive/
 │   ├── Big_Motor_Faceplate.stl
+│   ├── Big_motorSeat_brace.stl
+│   ├── Big_motorSeat.stl
 │   ├── Motor_Brace.stl
 │   └── GeoT_gear_crank.stl
 ├── base_frame/
+│   └── GeoT_Base_Fulcram_Mount.stl
 │   └── GeoT_Base_Motor_Drive_Mount.stl
 └── cable_management_box/
     ├── drivermount.stl
@@ -101,7 +103,7 @@ This is the end effector — the outermost component of the device. It holds the
 |---|---|
 | `Curved_Vialholder.stl` | Main curved arm with 12 vial slots arranged in a fan. **Print with supports.** |
 | `Curved_TopCover.stl` | Cover that clips over the 12 vial openings to prevent vials from jumping out when the arm drops. |
-| `Gept_Arm_Backplate.stl` | Backplate that bridges the vial holder to the arm sleeve (`ArmSleve.stl`). Acts as the structural interface between the holder and the rest of the lever arm. |
+| `Gept_Arm_Backplate.stl` | Backplate that bridges the vial holder to the arm sleeve (`Vial_Holder_Connector.stl`). Acts as the structural interface between the holder and the rest of the lever arm. |
 
 ---
 
@@ -112,10 +114,10 @@ These parts form the lever arm — the long articulated arm that spans the top o
 
 | File | Description |
 |---|---|
-| `ArmSleve.stl` | Sleeve that fits over the lever arm body. Connects to `Gept_Arm_Backplate.stl` at one end and `CentrPS.stl` at the other. |
-| `CentrPS.stl` | Central connector piece. Interfaces between the arm sleeve, the lever arm body, and the crank-rocker mechanism below. |
-| `ARM_B_end_d2.stl` | The body-end of the lever arm that connects to the fulcrum (`GeoT_Fulcram.stl`). |
-| `ArmInsert2.stl` | Internal insert that provides stiffness and bearing surfaces at the pivot end of the arm. |
+| `Vial_Holder_Connector.stl` | Sleeve that fits over the lever arm body. Connects to `Gept_Arm_Backplate.stl` at one end and `Piston_Push_Mid-link.stl` at the other. |
+| `Piston_Push_Mid-link.stl` | Central connector piece. Interfaces between the arm sleeve, the lever arm body, and the crank-rocker mechanism below. |
+| `Arm_Rotation_Bearing_Mount.stl` | The body-end of the lever arm that connects to the fulcrum (`GeoT_Fulcram.stl`). |
+| `Arm_Length_Body.stl` | Internal insert that provides stiffness, length and bearing surfaces at the pivot end of the arm. |
 | `GeoT_Fulcram.stl` | The A-frame fulcrum stand on the right side of the device. This is the stationary anchor point — the lever arm rotates around a pin housed here. Two steel guide rods pass through its base to connect it rigidly to the motor assembly. |
 
 ---
@@ -127,9 +129,9 @@ The coupler link in the four-bar linkage. It transfers motion from the rotating 
 
 | File | Description |
 |---|---|
-| `Bearing_Rod_PistonAdapter.stl` | Lower adapter that links the crank's outer pin to the connecting rod. |
-| `Bearing_Rod_Piston_Cyl.stl` | Cylinder/slider portion of the connecting rod. Provides adjustability for stroke length. |
-| `Bearing_Rod_Adapter.stl` | Upper adapter that links the connecting rod to the underside of the lever arm. |
+| `Top_Bearing_TO_Cylinder_Connector.stl` | Lower adapter that links the crank's outer pin to the connecting rod. |
+| `Top_Push_Cylinder.stl` | Cylinder/slider portion of the connecting rod. Provides adjustability for stroke length. |
+| `Bottom_Bearing_Rod_Adapter(Piston).stl` | Upper adapter that links the connecting rod to the underside of the lever arm. |
 
 ---
 
@@ -140,10 +142,9 @@ The crank is the input link that attaches directly to the gearbox output shaft a
 
 | File | Description |
 |---|---|
-| `cranckside_D5.stl` | The rotating crank disk/arm attached to the gearbox output shaft. |
-| `GeoT_Crank_Mount_final.stl` | Mount that secures the crank to the gearbox on the crank side. |
-| `GeoT_Crank_Mount_motorEnd_Final.stl` | Mount for the motor end of the crank shaft. |
-| `ND_CrankStand.stl` | Stand that supports the crank by attaching to `cranckside_D5.stl`. |
+| `Crank_Hand.stl` | The rotating crank disk/arm attached to the gearbox output shaft. |
+| `Crank_Stand.stl` | Stand that supports the crank by attaching to `Crank_Hand.stl`. |
+| `CrankStand_BottomBrace.stl` | Brace that secures the `Crank_Hand.stl` to the `GeoT_Base_Motor_Drive_Mount.stl` . |
 
 ---
 
@@ -167,7 +168,7 @@ The base provides the rigid ground link of the four-bar linkage. Two parallel st
 
 | File | Description |
 |---|---|
-| `GeoT_Base_motor_D2.stl` | Motor-side base block. Sits on the bench and anchors the motor assembly at one end of the two guide rods. |
+| `GeoT_Base_Motor_Drive_Mount.stl` | Motor-side base block. Sits on the bench and anchors the motor assembly at one end of the two guide rods. |
 
 > **Assembly note:** Slide all components onto the guide rods before tightening any set-screws. Square up the assembly first, then tighten.
 
@@ -189,13 +190,13 @@ A standalone enclosure for the motor driver electronics. This box sits separatel
 
 Assemble the device in the following order to avoid having to disassemble completed sections:
 
-1. **Base frame** — Insert the two steel guide rods through `GeoT_Base_motor_D2.stl`. Do not tighten set-screws yet.
+1. **Base frame** — Insert the two steel guide rods through `GeoT_Base_Motor_Drive_Mount.stl` and `GeoT_Base_Fulcram_Mount.stl`. Do not tighten set-screws yet.
 2. **Motor / drive** — Seat the motor/gearbox into `Big_Motor_Faceplate.stl` and secure with `Motor_Brace.stl`. Mesh `GeoT_gear_crank.stl` with the motor pinion.
-3. **Crank** — Attach `GeoT_Crank_Mount_final.stl` and `GeoT_Crank_Mount_motorEnd_Final.stl` to the gearbox output shaft. Mount `cranckside_D5.stl` and support with `ND_CrankStand.stl`.
-4. **Connecting rod** — Assemble `Bearing_Rod_PistonAdapter.stl`, `Bearing_Rod_Piston_Cyl.stl`, and `Bearing_Rod_Adapter.stl`. Attach the lower end to the crank outer pin.
+3. **Crank** — Attach `CrankStand_BottomBrace.stl` and `GeoT_Crank_Mount_motorEnd_Final.stl` to the gearbox output shaft. Mount `Crank_Hand.stl` and support with `Crank_Stand.stl`.
+4. **Connecting rod** — Assemble `Top_Bearing_TO_Cylinder_Connector.stl`, `Top_Push_Cylinder.stl`, and `Bottom_Bearing_Rod_Adapter(Piston).stl`. Attach the lower end to the crank outer pin.
 5. **Fulcrum / A-frame** — Slide `GeoT_Fulcram.stl` onto the free ends of the guide rods. Square to the motor assembly, then tighten all rod set-screws.
-6. **Lever arm** — Assemble `ARM_B_end_d2.stl` with `ArmInsert2.stl` and pin it to the fulcrum. Attach `CentrPS.stl` and then `ArmSleve.stl` working outward along the arm. Connect the upper end of the connecting rod to the arm underside via `Bearing_Rod_Adapter.stl`.
-7. **Vial holder** — Attach `Gept_Arm_Backplate.stl` to `ArmSleve.stl`, then clip `Curved_Vialholder.stl` to the backplate. Fit `Curved_TopCover.stl` over the vial slots.
+6. **Lever arm** — Assemble `Arm_Rotation_Bearing_Mount.stl` with `Arm_Length_Body.stl` and pin it to the fulcrum. Attach `Piston_Push_Mid-link.stl` and then `Vial_Holder_Connector.stl` working outward along the arm. Connect the upper end of the connecting rod to the arm underside via `Bottom_Bearing_Rod_Adapter(Piston).stl`.
+7. **Vial holder** — Attach `Gept_Arm_Backplate.stl` to `Vial_Holder_Connector.stl`, then clip `Curved_Vialholder.stl` to the backplate. Fit `Curved_TopCover.stl` over the vial slots.
 8. **Cable management** — Wire the motor driver into `drivermount.stl` and close with `drivermount_top.stl`. Place the box on the bench and connect motor leads.
 9. **Final check** — Power on briefly and confirm the arm oscillates smoothly through its full arc before loading vials.
 
@@ -203,33 +204,34 @@ Assemble the device in the following order to avoid having to disassemble comple
 
 ## Print Settings
 
-| Component | Material | Layer Height | Infill | Supports |
-|---|---|---|---|---|
-| `Curved_Vialholder.stl` | PLA | 0.2 mm | 40% | **Yes** |
-| `Curved_TopCover.stl` | PLA | 0.2 mm | 20% | **Yes** |
-| `Gept_Arm_Backplate.stl` | PLA | 0.2 mm | 40% | No |
-| `ArmSleve.stl` | PLA | 0.2 mm | 40% | No |
-| `CentrPS.stl` | PLA | 0.2 mm | 40% | No |
-| `ARM_B_end_d2.stl` | PLA | 0.2 mm | 40% | No |
-| `ArmInsert2.stl` | PLA | 0.2 mm | 60% | No |
-| `GeoT_Fulcram.stl` | PLA | 0.2 mm | 60% | No — print upright so layer lines run parallel to load |
-| `Bearing_Rod_PistonAdapter.stl` | PLA | 0.2 mm | 60% | No |
-| `Bearing_Rod_Piston_Cyl.stl` | PLA | 0.2 mm | 60% | No |
-| `Bearing_Rod_Adapter.stl` | PLA | 0.2 mm | 60% | No |
-| `cranckside_D5.stl` | PLA | 0.2 mm | 60% | No |
-| `GeoT_Crank_Mount_final.stl` | PLA | 0.2 mm | 40% | No |
-| `GeoT_Crank_Mount_motorEnd_Final.stl` | PLA | 0.2 mm | 40% | No |
-| `ND_CrankStand.stl` | PLA | 0.2 mm | 60% | No — print upright |
-| `Big_Motor_Faceplate.stl` | PLA | 0.2 mm | 40% | No |
-| `Motor_Brace.stl` | PLA | 0.2 mm | 40% | No |
-| `GeoT_gear_crank.stl` | **PETG or ABS** | 0.15 mm | 60% | No |
-| `GeoT_Base_motor_D2.stl` | PLA | 0.2 mm | 40% | No |
-| `drivermount.stl` | PLA | 0.2 mm | 20% | No |
-| `drivermount_top.stl` | PLA | 0.2 mm | 20% | No |
+| Component | Material | Layer Height | Wall Count | Infill | Supports |
+|---|---|---|---|---|---|
+| `Curved_Vialholder.stl` | PLA | 0.2 mm | 4 | 40% | **Yes** |
+| `Curved_TopCover.stl` | PLA | 0.2 mm | 4 | 20% | **Yes** |
+| `Gept_Arm_Backplate.stl` | PLA | 0.2 mm | 4 | 40% | No |
+| `Vial_Holder_Connector.stl` | PLA | 0.2 mm | 6 | 40% | No |
+| `Piston_Push_Mid-link.stl` | PLA | 0.2 mm | 6 | 40% | **Yes** |
+| `Arm_Rotation_Bearing_Mount.stl` | PLA | 0.2 mm | 6 | 40% | No |
+| `Arm_Length_Body.stl` | PLA | 0.2 mm | 4 | 60% | No |
+| `GeoT_Fulcram.stl` | PLA | 0.2 mm | 4 | 60% | No — print upright so layer lines run parallel to load |
+| `Top_Bearing_TO_Cylinder_Connector.stl` | PLA | 0.2 mm | 4 | 60% | No |
+| `Top_Push_Cylinder.stl` | PLA | 0.2 mm | 4 | 60% | No |
+| `Bottom_Bearing_Rod_Adapter(Piston).stl` | PLA | 0.2 mm | 4 | 60% | No |
+| `Crank_Hand.stl` | PLA | 0.2 mm | 4 | 60% | **Yes** — print on its side |
+| `CrankStand_BottomBrace.stl` | PLA | 0.2 mm | 6 | 40% | No |
+| `Big_Motor_Faceplate.stl` | PLA | 0.2 mm | 4 | 40% | No |
+| `Big_motorSeat.stl` | PLA | 0.2 mm | 4 | 40% | No |
+| `Big_motorSeat_brace.stl` | PLA | 0.2 mm | 4 | 40% | No |
+| `Motor_Brace.stl` | PLA | 0.2 mm | 4 | 40% | No |
+| `GeoT_gear_crank.stl` | **PETG or ABS** | 0.15 mm | 8 | 60% | No |
+| `GeoT_Base_Fulcram_Mount.stl` | PLA | 0.2 mm | 6 | 40% | No |
+| `GeoT_Base_Motor_Drive_Mount.stl` | PLA | 0.2 mm | 6 | 40% | No |
+| `drivermount.stl` | PLA | 0.2 mm | 2 | 20% | No |
+| `drivermount_top.stl` | PLA | 0.2 mm | 2 | 20% | No |
 
 > **Note on gears:** `GeoT_gear_crank.stl` should be printed in PETG or ABS at a finer layer height (0.15 mm) for better dimensional accuracy and wear resistance. PLA gears will work initially but may wear quickly under continuous use.
 
-> **Note on orientation:** Print `GeoT_Fulcram.stl` and `ND_CrankStand.stl` upright (standing on their base) so that layer lines run parallel to the primary load direction, maximizing inter-layer strength at the stress points.
+> **Note on orientation:** Print `GeoT_Fulcram.stl` and `Crank_Stand.stl` upright (standing on their base) so that layer lines run parallel to the primary load direction, maximizing inter-layer strength at the stress points.
 
 ---
 
@@ -239,12 +241,12 @@ Non-printed hardware required for assembly:
 
 | Item | Qty | Notes |
 |---|---|---|
-| Steel guide rods | 2 | Diameter must match bores in `GeoT_Base_motor_D2.stl` and `GeoT_Fulcram.stl` |
+| Steel guide rods | 2 | Diameter must match bores in `GeoT_Base_Motor_Drive_Mount.stl` and `GeoT_Fulcram.stl` |
 | Bearings | 2+ | At the pivot/fulcrum point and crank shaft ends |
 | DC gear motor | 1 | The motor and gearbox unit visible in device photos |
 | Motor driver board | 1 | Housed in `drivermount.stl` enclosure |
-| M3/M4 screws and nuts | Assorted | For securing all printed-to-printed and printed-to-hardware interfaces |
+| M3/M4 screws and nuts | Assorted | For scuring all printed-to-printed and printed-to-hardware interfaces |
 | Set-screws | 4+ | For locking guide rods in base and fulcrum blocks |
 | Hinge pin | 1 | Passes through bearing in `GeoT_Fulcram.stl` to pin the lever arm |
-| Crank outer pin | 1 | Connects `cranckside_D5.stl` to `Bearing_Rod_PistonAdapter.stl` |
+| Crank outer pin | 1 | Connects `Crank_Hand.stl` to `Top_Bearing_TO_Cylinder_Connector.stl` |
 | Metal adjustable clamp/sleeve | 1 | On the connecting rod; used to fine-tune stroke length and resting height |
