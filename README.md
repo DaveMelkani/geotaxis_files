@@ -47,7 +47,7 @@ Full assembly instructions, GPIO pin assignments, and a complete bill of materia
 
 - Linear Mixed-Effects (LME) models (Statsmodels, REML) with fixed effects for genotype, time, and their interaction, and random intercepts/slopes per vial to properly account for autocorrelated, repeated-measures data
 - Harmonic Mean p-value (HMP) combination across correlated LME terms per genotype comparison
-- Time-resolved Mann–Whitney U tests at each discrete timepoint, visualized as –log₁₀(p) significance heatmaps
+- Time-resolved Mann–Whitney U tests with BH-FDR corrections at each discrete timepoint, visualized as –log₁₀(q) significance heatmaps
 - Peak-position summary bar plots with embedded significance annotations and replicate counts (N)
 
 **Automation and batch processing**
