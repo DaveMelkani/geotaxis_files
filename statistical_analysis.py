@@ -8,34 +8,35 @@ import seaborn as sns
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 from scipy.stats import kruskal, mannwhitneyu
+from statsmodels.stats.multitest import multipletests
 from statsmodels.tools.sm_exceptions import ConvergenceWarning
 import re
 
 
-# Fixed color constants – used identically in every plot type
-CONTROL_COLOR = "#808080" # medium gray – always the control
+CONTROL_COLOR = "#808080" # medium gray -> always the control
 
 # Colorblind-friendly palette for comparison genotypes (in assignment order).
 # Add more hex codes here if you ever have more than 8 comparisons.
 COMPARISON_COLORS = [
-    "#E69F00",  # orange
-    "#56B4E9",  # sky blue
-    "#009E73",  # teal green
-    "#CC79A7",  # pink/mauve
-    "#0072B2",  # deep blue
-    "#D55E00",  # vermillion
-    "#F0E442",  # yellow
-    "#000000",  # black
+    "#E69F00", # orange
+    "#56B4E9", # sky blue
+    "#009E73", # teal green
+    "#CC79A7", # pink/mauve
+    "#0072B2", # deep blue
+    "#D55E00", # vermillion
+    "#F0E442", # yellow
+    "#000000", # black
 ]
 
 
 class Statistical_Analysis:
-    def __init__(self, experiment, filter_time=8.0):
+    def __init__(self, experiment, filter_time=8.0, fdr_alpha=0.05):
         self.experiment = experiment
         self.sex_list = ['male', 'female']
         self.data_type_list = ['position', 'velocity', 'low performer', 'middle performer', 'high performer']
         self.base_path = f'./{self.experiment}/'
         self.filter_time = filter_time
+        self.fdr_alpha = fdr_alpha   # <-- NEW: target FDR level for BH correction (default 5%)
         warnings.filterwarnings('ignore', category=ConvergenceWarning)
         warnings.filterwarnings('ignore', category=UserWarning)
 
@@ -388,14 +389,16 @@ class Statistical_Analysis:
         plt.close(fig)
         print(f"Saved peak position bar plot")
 
+    # UPDATED METHOD: raw p-values are now corrected with Benjamini-Hochberg FDR before being written to CSV / plotted.
     def mannwhitney_analysis(self):
         time_col = 'Time'
         genotype_col = 'Genotype'
         value_col = 'Position'
         times  = sorted(self.test_df[time_col].unique())
-        result = pd.DataFrame(index=times, columns=self.comparison_genotypes, dtype=object)
         df_ctrl = self.test_df[self.test_df[genotype_col] == self.control_genotype]
 
+        # compute every raw Mann-Whitney p-value first, before deciding significance on any of them                        ---
+        raw_pvals = {}   # (t, comp) -> p  (np.nan if untestable)
         for t in times:
             vals_ctrl = df_ctrl.loc[df_ctrl[time_col] == t, value_col].dropna().values
             for comp in self.comparison_genotypes:
@@ -408,10 +411,35 @@ class Statistical_Analysis:
                         _, p = mannwhitneyu(vals_ctrl, vals_comp, alternative='two-sided', method='auto')
                     except ValueError:
                         p = 1.0
-                result.at[t, comp] = (
-                    np.nan if np.isnan(p)
-                    else [f"{p:.4f}", self.significance_stars(p)]
-                )
+                if np.isnan(p):
+                    raw_pvals[(t, comp)] = np.nan
+                else:
+                    raw_pvals[(t, comp)] = p
+
+        # Benjamini-Hochberg FDR correction across that family
+        keys = list(raw_pvals.keys())
+        pvals_array = np.array([raw_pvals[k] for k in keys], dtype=float)
+        valid_mask = ~np.isnan(pvals_array)
+        qvals_array = np.full_like(pvals_array, np.nan)
+
+        if valid_mask.sum() > 0:
+            _, qvals_valid, _, _ = multipletests(
+                pvals_array[valid_mask],
+                alpha=self.fdr_alpha,
+                method='fdr_bh'
+            )
+            qvals_array[valid_mask] = qvals_valid
+
+        qvals = dict(zip(keys, qvals_array))
+
+        # assemble the result matrix with BOTH raw p and the BH-adjusted q-value, with significance stars now driven by the q-value rather than the raw p-value.
+        result = pd.DataFrame(index=times, columns=self.comparison_genotypes, dtype=object)
+        for (t, comp), p in raw_pvals.items():
+            q = qvals[(t, comp)]
+            if np.isnan(p) or np.isnan(q):
+                result.at[t, comp] = np.nan
+            else:
+                result.at[t, comp] = [f"{p:.4f}", f"{q:.4f}", self.significance_stars(q)]
 
         result.index.name = time_col
         output_folder = os.path.join(self.base_path, self.sex_folder, self.stats_folder_name)
@@ -423,42 +451,43 @@ class Statistical_Analysis:
         )
         csv_path = os.path.join(output_folder, csv_name)
         result.to_csv(csv_path)
+        # NOTE: each cell is now stored as [raw_p, BH_q, stars] instead of [raw_p, stars]
 
         self.plot_mannwhitney_heatmap(csv_path, output_folder)
 
+    # the heatmap now colors by the BH-adjusted q-value, not the raw p-value, and labels the colorbar / title accordingly.
     def plot_mannwhitney_heatmap(self, csv_path: str, output_folder: str):
         df_raw = pd.read_csv(csv_path, index_col=0)
         df_raw.index = df_raw.index.astype(float)
 
-        def parse_p(val):
+        def parse_q(val):
             if pd.isna(val):
                 return np.nan
             try:
-                parsed = ast.literal_eval(str(val))
-                return float(parsed[0])
+                parsed = ast.literal_eval(str(val))   # parsed = [raw_p_str, q_str, stars]
+                return float(parsed[1])
             except Exception:
                 return np.nan
 
-        p_df = df_raw.map(parse_p)
+        q_df = df_raw.map(parse_q)
 
         eps = np.finfo(float).tiny
-        log_p_df = p_df.map(lambda v: -np.log10(max(v, eps)) if not np.isnan(v) else 0.0)
-        log_p_df = log_p_df.fillna(0)
-        log_p_df = log_p_df.sort_index(ascending=True)
+        log_q_df = q_df.map(lambda v: -np.log10(max(v, eps)) if not np.isnan(v) else 0.0)
+        log_q_df = log_q_df.fillna(0)
+        log_q_df = log_q_df.sort_index(ascending=True)
 
-        n_cols = len(log_p_df.columns)
-        n_rows = len(log_p_df.index)
-        
+        n_cols = len(log_q_df.columns)
+        n_rows = len(log_q_df.index)
+
         fig_w = max(3, 1.6 * n_cols + 1.8)
-        # CHANGED: Reduced minimum height (from 5 to 3) and per-row multiplier (from 0.30 to 0.10)
         fig_h = max(4, 0.15 * n_rows + 1.0)
 
         fig, ax  = plt.subplots(figsize=(fig_w, fig_h))
 
-        vmax = max(4.0, float(log_p_df.max().max())) 
+        vmax = max(4.0, float(log_q_df.max().max()))
 
         im = ax.imshow(
-            log_p_df.values,
+            log_q_df.values,
             aspect='auto',
             cmap='YlOrRd',
             vmin=0,
@@ -469,11 +498,11 @@ class Statistical_Analysis:
 
         ax.set_xticks(np.arange(n_cols))
         ax.set_xticklabels(
-            log_p_df.columns.tolist(),
+            log_q_df.columns.tolist(),
             rotation=45, ha='right', fontsize=9
         )
 
-        times = log_p_df.index.tolist() 
+        times = log_q_df.index.tolist()
         tick_step = max(1, len(times) // 26) # avoid crowding if very dense
         ytick_idx = list(range(0, len(times), tick_step))
         ax.set_yticks(ytick_idx)
@@ -482,12 +511,12 @@ class Statistical_Analysis:
         ax.set_xlabel(f"Genotype (vs {self.control_genotype})", fontsize=9)
         ax.set_ylabel("Time (s)", fontsize=10)
         ax.set_title(
-            f"{self.data_type.capitalize()} Time-Point Sig Heatmap",
+            f"{self.data_type.capitalize()} Time-Point Sig Heatmap (BH-FDR adjusted)",
             fontsize=11, pad=8
         )
 
         cbar = fig.colorbar(im, ax=ax, pad=0.02)
-        cbar.set_label(r"$-\log_{10}$(p-value)", fontsize=9)
+        cbar.set_label(r"$-\log_{10}$(BH-adjusted $q$-value)", fontsize=9)
         cbar_ticks = np.arange(0, vmax + 0.5, 0.5)
         cbar.set_ticks(cbar_ticks)
         cbar.ax.tick_params(labelsize=8)
@@ -501,4 +530,4 @@ class Statistical_Analysis:
         save_path = os.path.join(output_folder, heatmap_name)
         fig.savefig(save_path, bbox_inches='tight', dpi=300)
         plt.close(fig)
-        print(f"Saved Mann-Whitney heatmap")
+        print(f"Saved Mann-Whitney heatmap (BH-FDR adjusted)")
